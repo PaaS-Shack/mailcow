@@ -241,7 +241,43 @@ module.exports = {
                 return this.post(`api/v1/delete/mailbox`, [`${params.local_part}@${params.domain}`]);
             }
         },
+        'domain.alias.create': {
+            rest: "POST /domains/:domain/alias",
+            params: {
+                "active": { type: "enum", optional: true, default: 1, values: [0, 1] },
+                "address": { type: "string", optional: false, trim: true },
+                "goto": { type: "string", optional: false, trim: true },
+            },
+            async handler(ctx) {
+                const params = Object.assign({}, ctx.params);
+                return this.post(`api/v1/add/alias`, {
+                    "active": params.active,
+                    "address": params.address,
+                    "goto": params.goto,
+                })
+            }
+        },
 
+        'domain.alias.get': {
+            rest: "GET /domains/:domain/alias/:id",
+            params: {
+                id: { type: "number", optional: false, trim: true },
+            },
+            async handler(ctx) {
+                const params = Object.assign({}, ctx.params);
+                return this.get(`api/v1/get/alias/${params.id}`);
+            }
+        },
+        'domain.alias.remove': {
+            rest: "DELETE /domains/:domain/alias",
+            params: {
+                id: { type: "number", optional: false },
+            },
+            async handler(ctx) {
+                const params = Object.assign({}, ctx.params);
+                return this.post(`api/v1/delete/alias`, [params.id])
+            }
+        },
 
         'domain.dkim.create': {
             rest: "POST /domains/:domain/dkim",
